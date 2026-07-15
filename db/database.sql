@@ -1,7 +1,11 @@
 -- Active: 1784102708559@@127.0.0.1@3306
 SHOW DATABASES
 
+DESCRIBE incidents
+
 USE iron_dome
+
+SELECT * FROM operators
 
 SHOW TABLES
 
@@ -15,7 +19,7 @@ CREATE TABLE IF NOT EXISTS incidents(
     id INT AUTO_INCREMENT PRIMARY KEY,
     code_name VARCHAR(100),
     threat_level VARCHAR(50),
-    status VARCHAR(50),
+    status VARCHAR(50) DEFAULT "OPEN",
     operator_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
