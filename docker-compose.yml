@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: iron-dome-db
+    restart: always
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
