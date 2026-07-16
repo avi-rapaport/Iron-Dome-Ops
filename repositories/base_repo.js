@@ -14,5 +14,10 @@ export function initBaseRepo(tableName) {
     return result.insertId;
   }
 
+  async function get() {
+    const [result] = await pool.execute(`SELECT * FROM ${tableName}`);
+    return result;
+  }
+
   return { tableName, create };
 }

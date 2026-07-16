@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { fa } from "zod/locales";
 
 export const operatorSchema = z.object({
   name: z.string().max(100),
@@ -34,14 +35,18 @@ export function validateBody(schema) {
 }
 
 export async function errorHandling(err, req, res, next) {
-  const statusCode = err.statusCode || 500;
-  const message = err.statusCode ? err.message : "Internal server error";
-  const errors = err.errors;
+  let statusCode = err.statusCode || 500;
+  let message = err.statusCode ? err.message : "Internal server error";
+  let jsonResponse = { success: false, message: message };
 
-  if (errors && statusCode === 400) {
-    return res
-      .status(statusCode)
-      .json({ Success: false, Message: message, errors: errors });
+  if (err.errors && statusCode === 400) {
+    jsonResponse.errors = err.errors;
   }
-  return res.status(statusCode).json({ Success: false, Message: message });
+
+  if (err.errno === 1452) {
+    statusCode = 400;
+    jsonResponse.message = "foreign key doesn't exist!";
+  }
+
+  return res.status(statusCode).json(jsonResponse);
 }

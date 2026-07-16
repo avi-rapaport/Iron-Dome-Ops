@@ -5,6 +5,12 @@ async function createIncident(newIncident) {
   return newId;
 }
 
+async function getIncidents() {
+  const incidents = await incidentsRepo.get();
+  return incidents;
+}
+
 export const incidentsService = {
   createIncident,
+  getIncidents,
 };
