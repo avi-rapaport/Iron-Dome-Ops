@@ -5,7 +5,7 @@ DESCRIBE incidents
 
 USE iron_dome
 
-SELECT * FROM operators
+SELECT * FROM incidents
 
 SHOW TABLES
 
