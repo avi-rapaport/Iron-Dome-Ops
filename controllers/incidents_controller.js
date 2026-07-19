@@ -1,10 +1,16 @@
-import { success } from "zod";
 import { incidentsRepo } from "../repositories/incidents_repo.js";
 import { incidentsService } from "../services/incidents_service.js";
+import { logsService } from "../services/logs_service.js";
 
 async function createIncident(req, res) {
   const newIncident = req.body;
   const newId = await incidentsService.createIncident(newIncident);
+  await logsService.createLog(
+    "INCIDENT_CREATED",
+    newId,
+    newIncident.operator_id,
+    "New incident created",
+  );
   return res.status(201).json({
     success: true,
     message: `New incident created successsfully | new id: ${newId}`,
@@ -23,6 +29,14 @@ async function updateIncidentStatus(req, res) {
     error.statusCode = 400;
     throw error;
   }
+
+  const incident = await incidentsService.getIncidentById(id);
+  await logsService.createLog(
+    "STATUS_UPDATED",
+    id,
+    incident.operator_id,
+    `Status changed to ${req.body.status}`,
+  );
 
   const newStatus = req.body;
   await incidentsService.updateIncidentStatus(Number(id), newStatus);
