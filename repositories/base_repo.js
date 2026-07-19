@@ -1,4 +1,4 @@
-import { set } from "zod";
+import { object, set } from "zod";
 import { pool } from "../db/database.js";
 
 export function initBaseRepo(tableName) {
@@ -15,7 +15,18 @@ export function initBaseRepo(tableName) {
     return result.insertId;
   }
 
-  async function getById(id) {
+  async function find(filter = {}) {
+    const keys = Object.keys(filter);
+    const values = Object.values(filter);
+    const filterClause = keys.map((key) => `${key}=?`).join(" AND ");
+    const [result] = await pool.execute(
+      `SELECT * FROM ${tableName} WHERE ${filterClause}`,
+      values,
+    );
+    return result;
+  }
+
+  async function findById(id) {
     const [result] = await pool.execute(
       `SELECT * FROM ${tableName} WHERE id = ?`,
       [id],
@@ -35,5 +46,5 @@ export function initBaseRepo(tableName) {
     );
   }
 
-  return { tableName, create, getById, update };
+  return { tableName, create, find, findById, update };
 }

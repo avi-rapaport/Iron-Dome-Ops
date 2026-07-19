@@ -1,3 +1,4 @@
+import { success } from "zod";
 import { incidentsRepo } from "../repositories/incidents_repo.js";
 import { incidentsService } from "../services/incidents_service.js";
 
@@ -10,10 +11,21 @@ async function createIncident(req, res) {
   });
 }
 
+async function getOpenIncidents(req, res) {
+  const openIncidents = await incidentsService.getOpenIncidents();
+  return res.json({ success: true, data: openIncidents });
+}
+
 async function updateIncidentStatus(req, res) {
-  const id = Number(req.params.id);
+  const id = req.params.id;
+  if (!id || isNaN(id)) {
+    const error = new Error("Invalid or missing ID!");
+    error.statusCode = 400;
+    throw error;
+  }
+
   const newStatus = req.body;
-  await incidentsService.updateIncidentStatus(id, newStatus);
+  await incidentsService.updateIncidentStatus(Number(id), newStatus);
 
   return res.json({
     success: true,
@@ -24,4 +36,5 @@ async function updateIncidentStatus(req, res) {
 export const incidentsController = {
   createIncident,
   updateIncidentStatus,
+  getOpenIncidents,
 };

@@ -5,13 +5,18 @@ async function createIncident(newIncident) {
   return newId;
 }
 
+async function getOpenIncidents() {
+  const result = await incidentsRepo.find({ status: "OPEN" });
+  return result;
+}
+
 async function getIncidentById(id) {
-  const incident = await incidentsRepo.getById(id);
+  const incident = await incidentsRepo.findById(id);
   return incident;
 }
 
 async function updateIncidentStatus(id, newStatus) {
-  const incidentToUpdate = await incidentsRepo.getById(id);
+  const incidentToUpdate = await incidentsRepo.findById(id);
   if (!incidentToUpdate) {
     const error = new Error(`Incident with id ${id} not found!`);
     error.statusCode = 404;
@@ -22,6 +27,7 @@ async function updateIncidentStatus(id, newStatus) {
 
 export const incidentsService = {
   createIncident,
+  getOpenIncidents,
   getIncidentById,
   updateIncidentStatus,
 };

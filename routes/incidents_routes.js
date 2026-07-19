@@ -20,3 +20,5 @@ router.patch(
   validateBody(updateStatusSchema),
   incidentsController.updateIncidentStatus,
 );
+
+router.get("/open", incidentsController.getOpenIncidents);

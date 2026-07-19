@@ -50,6 +50,6 @@ export async function errorHandling(err, req, res, next) {
     statusCode = 400;
     jsonResponse.message = "foreign key doesn't exist!";
   }
-
+  console.log(err);
   return res.status(statusCode).json(jsonResponse);
 }
