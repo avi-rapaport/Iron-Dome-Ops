@@ -2,17 +2,6 @@
 
 Backend REST API for managing operational incidents.
 
-## Technologies
-
-- Node.js
-- Express.js
-- MySQL
-- mysql2
-- Docker
-- Docker Compose
-
----
-
 ## Installation
 
 Clone the repository:
@@ -105,21 +94,45 @@ http://localhost:3000
 ## Project Structure
 
 ```
-project/
+iron-dome-ops/
 │
 ├── controllers/
-├── services/
-├── repositories/
-├── routes/
+│   ├── incidents_controller.js
+│   └── operators_controller.js
+│
 ├── db/
+│   ├── database.js
+│   └── database.sql
+│
 ├── middleware/
-├── utils/
+│   └── validation_middleware.js
+│
+├── node_modules/
+│
+├── repositories/
+│   ├── base_repo.js
+│   ├── incidents_repo.js
+│   ├── logs_repo.js
+│   └── operators_repo.js
+│
+├── routes/
+│   ├── incidents_routes.js
+│   └── operators_routes.js
+│
+├── services/
+│   ├── incidents_service.js
+│   ├── logs_service.js
+│   └── operators_service.js
+│
+├── .dockerignore
+├── .env
+├── .gitignore
 ├── app.js
-├── Dockerfile
 ├── docker-compose.yml
-├── database.sql
+├── Dockerfile
+├── package-lock.json
 ├── package.json
-└── .env
+└── readme.MD
 ```
 
 ---
