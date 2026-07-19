@@ -1,3 +1,4 @@
+import { set } from "zod";
 import { pool } from "../db/database.js";
 
 export function initBaseRepo(tableName) {
@@ -14,10 +15,25 @@ export function initBaseRepo(tableName) {
     return result.insertId;
   }
 
-  async function get() {
-    const [result] = await pool.execute(`SELECT * FROM ${tableName}`);
-    return result;
+  async function getById(id) {
+    const [result] = await pool.execute(
+      `SELECT * FROM ${tableName} WHERE id = ?`,
+      [id],
+    );
+
+    return result[0] || null;
   }
 
-  return { tableName, create };
+  async function update(id, newData) {
+    const keys = Object.keys(newData);
+    const values = Object.values(newData);
+    const setClause = keys.map((key) => `${key}=?`).join(", ");
+
+    const [result] = await pool.execute(
+      `UPDATE ${tableName} SET ${setClause} WHERE id = ?`,
+      [...values, id],
+    );
+  }
+
+  return { tableName, create, getById, update };
 }

@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { fa } from "zod/locales";
 
 export const operatorSchema = z.object({
   name: z.string().max(100),
   operator_rank: z.string().max(100),
 });
 
-export const incidentSchema = z.object({
+export const createIncidentSchema = z.object({
   code_name: z.enum([
     "RED SKY",
     "BLACK FALCON",
@@ -16,6 +15,10 @@ export const incidentSchema = z.object({
   ]),
   threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
   operator_id: z.number().int().positive(),
+});
+
+export const updateStatusSchema = z.object({
+  status: z.enum(["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"]),
 });
 
 export function validateBody(schema) {
